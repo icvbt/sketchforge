@@ -1,0 +1,416 @@
+/* SketchForge app shell: "drafting table" theme.
+   Applies to the Streamlit UI only, never to the generated preview page. */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+:root {
+  --paper: #F4F1EA;
+  --ink: #1A1A1A;
+  --ink-soft: rgba(26, 26, 26, 0.62);
+  --grid: rgba(26, 26, 26, 0.05);
+  --red: #E5391F;
+  --serif: "Fraunces", Georgia, serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* ---------- Page: paper with a faint graph grid ---------- */
+[data-testid="stApp"] {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--mono);
+}
+
+/* ---------- Streamlit chrome: transparent header (keeps the sidebar toggle), hide menu, Deploy, footer ---------- */
+[data-testid="stHeader"] { background: transparent; }
+[data-testid="stToolbarActions"],
+[data-testid="stMainMenu"],
+[data-testid="stAppDeployButton"],
+[data-testid="stDecoration"],
+footer {
+  display: none !important;
+}
+
+/* ---------- Sidebar (Fast mode setting) ---------- */
+[data-testid="stSidebar"] {
+  background: var(--paper);
+  border-right: 1px solid var(--ink);
+}
+[data-testid="stSidebarUserContent"] .sf-mini { margin: 8px 0; line-height: 1.8; }
+[data-testid="stSidebar"] [data-testid="stCheckbox"] p {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---------- Main container spacing (8px scale) ---------- */
+[data-testid="stMainBlockContainer"] {
+  max-width: 1440px;
+  padding: 48px 48px 32px;
+}
+
+/* ---------- Title area ---------- */
+.sf-head {
+  padding-bottom: 24px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--ink);
+}
+.sf-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(48px, 7vw, 88px);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+.sf-sub {
+  margin: 16px 0 0;
+  max-width: 56ch;
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* ---------- Numbered panels with a label tab on the top border ---------- */
+.st-key-sf-panel-sketch,
+.st-key-sf-panel-refine,
+.st-key-sf-panel-preview {
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 0 24px 24px;
+  margin-top: 24px;
+  background: rgba(244, 241, 234, 0.6);
+}
+.st-key-sf-panel-refine { margin-top: 40px; }
+.sf-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+  margin-top: -12px;
+  padding: 0 10px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sf-tab b { color: var(--red); font-weight: 700; }
+
+/* Small mono annotations ("TRY", version counter) */
+.sf-mini {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.sf-hint {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* ---------- Widget labels and captions ---------- */
+[data-testid="stWidgetLabel"] p,
+[data-testid="stCaptionContainer"],
+[data-testid="stImageCaption"] {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft) !important;
+}
+
+/* ---------- Buttons ---------- */
+/* Primary: solid marker red, square, mono uppercase */
+[data-testid="stBaseButton-primary"] {
+  background: var(--red);
+  border: 1px solid var(--red);
+  border-radius: 0;
+  color: #fff;
+  min-height: 48px;
+}
+[data-testid="stBaseButton-primary"]:hover:not(:disabled) {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+/* Secondary (Undo, Download, suggestions, Browse files): ink outline, inverts on hover */
+[data-testid="stBaseButton-secondary"] {
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+}
+[data-testid="stBaseButton-secondary"]:hover:not(:disabled) {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+[data-testid="stBaseButton-primary"]:focus-visible,
+[data-testid="stBaseButton-secondary"]:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+[data-testid="stBaseButton-primary"]:disabled,
+[data-testid="stBaseButton-secondary"]:disabled {
+  background: transparent;
+  border: 1px dashed var(--ink-soft);
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+[data-testid="stBaseButton-primary"] p,
+[data-testid="stBaseButton-secondary"] p {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+/* Suggestion chips: smaller, sentence case */
+.st-key-sf-suggest [data-testid="stBaseButton-secondary"] {
+  min-height: 32px;
+  padding: 4px 12px;
+}
+.st-key-sf-suggest [data-testid="stBaseButton-secondary"] p {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ---------- File uploader: dashed ink drop area ---------- */
+[data-testid="stFileUploaderDropzone"] {
+  background: transparent;
+  border: 1px dashed var(--ink);
+  border-radius: 0;
+  padding: 24px;
+}
+[data-testid="stFileUploaderDropzoneInstructions"],
+[data-testid="stFileUploaderDropzoneInstructions"] * {
+  font-family: var(--mono) !important;
+  font-size: 12px !important;
+  color: var(--ink-soft) !important;
+}
+
+/* Uploaded sketch thumbnail */
+[data-testid="stImage"] img {
+  border: 1px solid var(--ink);
+  border-radius: 0;
+}
+
+/* ---------- Chat: plain bordered blocks, no avatars ---------- */
+.sf-msg {
+  border: 1px solid var(--ink);
+  padding: 8px 16px 12px;
+  background: transparent;
+}
+.sf-msg-assistant {
+  background: #fff;
+  border-left: 3px solid var(--ink);
+}
+.sf-msg-who {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+}
+.sf-msg-text {
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+[data-testid="stChatInput"] {
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: #fff;
+}
+[data-testid="stChatInput"] > div { border-radius: 0; }
+[data-testid="stChatInputTextArea"] {
+  font-family: var(--mono) !important;
+  font-size: 13px !important;
+}
+
+/* ---------- Preview toolbar ---------- */
+.st-key-sf-toolbar {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--ink);
+}
+.st-key-sf-toolbar [data-testid="stWidgetLabel"] p { text-transform: uppercase; }
+.sf-version { padding: 0 8px; }
+
+/* ---------- Preview sheet with crop-mark corners (the one decorative detail) ---------- */
+.st-key-sf-sheet {
+  position: relative;
+  padding: 16px;
+}
+.st-key-sf-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--ink), var(--ink)) left top / 16px 1px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) left top / 1px 16px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right top / 16px 1px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right top / 1px 16px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) left bottom / 16px 1px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) left bottom / 1px 16px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right bottom / 16px 1px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right bottom / 1px 16px no-repeat;
+}
+
+/* ---------- Empty state ---------- */
+.sf-empty {
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px;
+  margin-top: 8px;
+  background: #fff;
+  border: 1px solid var(--ink);
+}
+.sf-empty-lead {
+  margin: 0 0 32px;
+  max-width: 18ch;
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.sf-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+.sf-steps li {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sf-steps li span { color: var(--red); font-weight: 700; }
+
+/* ---------- Alerts: readable one-line errors ---------- */
+[data-testid="stAlert"] > div {
+  background: #fff;
+  border: 1px solid var(--red);
+  border-left-width: 3px;
+  border-radius: 0;
+  color: var(--ink);
+}
+[data-testid="stAlert"] p {
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+/* ---------- Generation progress: step list ---------- */
+.sf-progress {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+.sf-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.2);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.sf-step-mark {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--ink-soft);
+}
+.sf-step-note {
+  margin-left: auto;
+  text-transform: none;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+.sf-step-run { color: var(--ink); font-weight: 700; }
+.sf-step-run .sf-step-mark { background: var(--red); border-color: var(--red); }
+.sf-step-done { color: var(--ink); }
+.sf-step-done .sf-step-mark { background: var(--ink); border-color: var(--ink); }
+.sf-step-fail { color: var(--red); }
+.sf-step-fail .sf-step-mark { border-color: var(--red); }
+
+/* Live output expander (raw text only, never rendered) */
+[data-testid="stExpander"] details {
+  border: 1px solid var(--ink);
+  border-radius: 0;
+}
+[data-testid="stExpander"] summary p {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+[data-testid="stExpander"] pre { max-height: 240px; font-size: 11px; }
+
+/* Demo notice above the preview */
+.sf-demo-note {
+  padding: 8px 0 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink);
+}
+.sf-demo-note::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  background: var(--red);
+}
+
+/* ---------- Footer line ---------- */
+.sf-foot {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.sf-foot span { color: var(--red); padding: 0 8px; }
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 640px) {
+  [data-testid="stMainBlockContainer"] { padding: 24px 16px; }
+  .sf-empty { padding: 24px; min-height: 360px; }
+}

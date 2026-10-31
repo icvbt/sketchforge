@@ -1,0 +1,11 @@
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+.streamlit/secrets.toml
+test.html
+test_new.html
+test_edit.html
+test_default.html
+test_fast.html

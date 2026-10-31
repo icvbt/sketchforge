@@ -1,0 +1,16 @@
+[theme]
+base = "light"
+primaryColor = "#E5391F"
+backgroundColor = "#F4F1EA"
+secondaryBackgroundColor = "#EAE5DA"
+textColor = "#1A1A1A"
+borderColor = "#1A1A1A"
+showWidgetBorder = true
+font = "JetBrains Mono, monospace"
+headingFont = "Fraunces, serif"
+codeFont = "JetBrains Mono, monospace"
+baseRadius = "none"
+buttonRadius = "none"
+
+[client]
+toolbarMode = "minimal"
