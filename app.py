@@ -2,7 +2,7 @@ import re, time, html as h
 from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
-from PIL import Image
+from PIL import Image, ImageOps
 from exporter import make_zip
 
 st.set_page_config(page_title="SketchForge", page_icon="✏️", layout="wide")
@@ -22,6 +22,7 @@ CSP = ("<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none
 SUGGESTIONS = ["Make the header dark blue", "Add a contact form", "Use a warmer color palette"]
 EXAMPLES = Path(__file__).parent / "examples"
 HINT = "Try again, or use Load demo."
+MAX_SKETCH_SIDE = 2048  # a 12 MP photo sent as PNG is ~24 MB, over the API's inline limit
 
 def valid(page):
     return bool(page) and "<html" in page.lower() and "</html>" in page.lower() and len(page) < 500_000
@@ -57,6 +58,29 @@ def render_preview(page, mobile=False, height=680):
         f'background:white;display:block;margin:auto;box-sizing:border-box"></iframe>',
         height=height + 4,
     )
+
+def load_sketch(file):
+    """Decode an uploaded PNG/JPG/JPEG into an upright RGB image. Returns (image, error message)."""
+    try:
+        with Image.open(file) as im:
+            if im.format not in ("PNG", "JPEG"):  # checks the content, not just the file extension
+                return None, f"That file is not a PNG or JPEG image ({im.format or 'unknown format'}). Upload a PNG, JPG or JPEG."
+            im.load()  # forces a full decode so truncated files fail here
+            im = ImageOps.exif_transpose(im)  # phone photos store rotation in EXIF
+            if im.mode.startswith("I"):  # 16-bit PNG: scale down to 8-bit grey
+                im = im.convert("I").point(lambda v: v * (1 / 256)).convert("L")
+            if im.mode in ("RGBA", "LA", "PA") or (im.mode == "P" and "transparency" in im.info):
+                rgba = im.convert("RGBA")  # transparent areas become white paper, not black
+                im = Image.new("RGB", rgba.size, "white")
+                im.paste(rgba, mask=rgba.getchannel("A"))
+            else:
+                im = im.convert("RGB")
+            im.thumbnail((MAX_SKETCH_SIDE, MAX_SKETCH_SIDE))  # keeps the API request under its size limit
+            return im, None
+    except Image.DecompressionBombError:
+        return None, "That image is too large to process. Upload a smaller photo."
+    except Exception:
+        return None, "That file couldn't be read. It may be damaged or not a real PNG, JPG or JPEG image."
 
 @st.cache_resource
 def demo_sketch():
@@ -143,13 +167,12 @@ left, right = st.columns([1, 1.4], gap="large")
 with left:
     with st.container(key="sf-panel-sketch"):
         label("01", "Sketch")
-        up = st.file_uploader("Photo of your sketch (PNG or JPG)", type=["png", "jpg", "jpeg"])
+        up = st.file_uploader("Photo of your sketch (PNG, JPG or JPEG)", type=["png", "jpg", "jpeg"])
         img, caption = None, "Your sketch"
         if up:
-            try:
-                img = Image.open(up).convert("RGB")
-            except Exception:
-                st.error("That file couldn't be opened as an image. Try a PNG or JPG photo.")
+            img, problem = load_sketch(up)
+            if problem:
+                st.error(problem)
         elif st.session_state.demo_sketch:
             try:
                 img, caption = demo_sketch(), "Demo sketch"
